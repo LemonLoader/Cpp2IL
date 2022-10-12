@@ -125,122 +125,122 @@ namespace LibCpp2IL.Metadata
             if (metadataHeader.version < 24) throw new Exception("ERROR: Invalid metadata version, we only support v24+, this metadata is using v" + metadataHeader.version);
 
             LibLogger.Verbose("\tReading image definitions...");
-            var start = DateTime.Now;
+            //var start = DateTime.Now;
             imageDefinitions = ReadMetadataClassArray<Il2CppImageDefinition>(metadataHeader.imagesOffset, metadataHeader.imagesCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
             
             LibLogger.Verbose("\tReading assembly definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             AssemblyDefinitions = ReadMetadataClassArray<Il2CppAssemblyDefinition>(metadataHeader.assembliesOffset, metadataHeader.assembliesCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading type definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             typeDefs = ReadMetadataClassArray<Il2CppTypeDefinition>(metadataHeader.typeDefinitionsOffset, metadataHeader.typeDefinitionsCount);
-            LibLogger.VerboseNewline($"{typeDefs.Length} OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"{typeDefs.Length} OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading interface offsets...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             interfaceOffsets = ReadMetadataClassArray<Il2CppInterfaceOffset>(metadataHeader.interfaceOffsetsOffset, metadataHeader.interfaceOffsetsCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading vtable indices...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             VTableMethodIndices = ReadMetadataClassArray<uint>(metadataHeader.vtableMethodsOffset, metadataHeader.vtableMethodsCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading method definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             methodDefs = ReadMetadataClassArray<Il2CppMethodDefinition>(metadataHeader.methodsOffset, metadataHeader.methodsCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading method parameter definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             parameterDefs = ReadMetadataClassArray<Il2CppParameterDefinition>(metadataHeader.parametersOffset, metadataHeader.parametersCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading field definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             fieldDefs = ReadMetadataClassArray<Il2CppFieldDefinition>(metadataHeader.fieldsOffset, metadataHeader.fieldsCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+           LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading default field values...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             fieldDefaultValues = ReadMetadataClassArray<Il2CppFieldDefaultValue>(metadataHeader.fieldDefaultValuesOffset, metadataHeader.fieldDefaultValuesCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading default parameter values...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             parameterDefaultValues = ReadMetadataClassArray<Il2CppParameterDefaultValue>(metadataHeader.parameterDefaultValuesOffset, metadataHeader.parameterDefaultValuesCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading property definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             propertyDefs = ReadMetadataClassArray<Il2CppPropertyDefinition>(metadataHeader.propertiesOffset, metadataHeader.propertiesCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading interface definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             interfaceIndices = ReadClassArrayAtRawAddr<int>(metadataHeader.interfacesOffset, metadataHeader.interfacesCount / 4);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading nested type definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             nestedTypeIndices = ReadClassArrayAtRawAddr<int>(metadataHeader.nestedTypesOffset, metadataHeader.nestedTypesCount / 4);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading event definitions...");
-            start = DateTime.Now;
+           //start = DateTime.Now;
             eventDefs = ReadMetadataClassArray<Il2CppEventDefinition>(metadataHeader.eventsOffset, metadataHeader.eventsCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading generic container definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             genericContainers = ReadMetadataClassArray<Il2CppGenericContainer>(metadataHeader.genericContainersOffset, metadataHeader.genericContainersCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             LibLogger.Verbose("\tReading generic parameter definitions...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             genericParameters = ReadMetadataClassArray<Il2CppGenericParameter>(metadataHeader.genericParametersOffset, metadataHeader.genericParametersCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
             
             LibLogger.Verbose("\tReading generic parameter constraint indices...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             constraintIndices = ReadMetadataClassArray<int>(metadataHeader.genericParameterConstraintsOffset, metadataHeader.genericParameterConstraintsCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             //v17+ fields
             LibLogger.Verbose("\tReading string definitions...");
-            start = DateTime.Now;
+            // = DateTime.Now;
             stringLiterals = ReadMetadataClassArray<Il2CppStringLiteral>(metadataHeader.stringLiteralOffset, metadataHeader.stringLiteralCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             if (LibCpp2IlMain.MetadataVersion < 24.2f)
             {
                 LibLogger.Verbose("\tReading RGCTX data...");
-                start = DateTime.Now;
+                //start = DateTime.Now;
 
                 RgctxDefinitions = ReadMetadataClassArray<Il2CppRGCTXDefinition>(metadataHeader.rgctxEntriesOffset, metadataHeader.rgctxEntriesCount);
 
-                LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+                LibLogger.VerboseNewline($"OK ([android moment]ms)");
             }
 
             //Removed in v27 (2020.2) and also 24.5 (2019.4.21)
             if (LibCpp2IlMain.MetadataVersion < 27f)
             {
                 LibLogger.Verbose("\tReading usage data...");
-                start = DateTime.Now;
+                //start = DateTime.Now;
                 metadataUsageLists = ReadMetadataClassArray<Il2CppMetadataUsageList>(metadataHeader.metadataUsageListsOffset, metadataHeader.metadataUsageListsCount);
                 metadataUsagePairs = ReadMetadataClassArray<Il2CppMetadataUsagePair>(metadataHeader.metadataUsagePairsOffset, metadataHeader.metadataUsagePairsCount);
 
                 DecipherMetadataUsage();
-                LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+                LibLogger.VerboseNewline($"OK ([android moment]ms)");
             }
 
             LibLogger.Verbose("\tReading field references...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             fieldRefs = ReadMetadataClassArray<Il2CppFieldRef>(metadataHeader.fieldRefsOffset, metadataHeader.fieldRefsCount);
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
 
             //v21+ fields
             
@@ -248,31 +248,31 @@ namespace LibCpp2IL.Metadata
             {
                 //Removed in v29
                 LibLogger.Verbose("\tReading attribute types...");
-                start = DateTime.Now;
+                //start = DateTime.Now;
                 attributeTypeRanges = ReadMetadataClassArray<Il2CppCustomAttributeTypeRange>(metadataHeader.attributesInfoOffset, metadataHeader.attributesInfoCount);
                 attributeTypes = ReadClassArrayAtRawAddr<int>(metadataHeader.attributeTypesOffset, metadataHeader.attributeTypesCount / 4);
-                LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+                LibLogger.VerboseNewline($"OK ([android moment]ms)");
             }
             else
             {
                 //Since v29
                 LibLogger.Verbose("\tReading Attribute data...");
-                start = DateTime.Now;
+                //start = DateTime.Now;
                 
                 //Pointer array
                 AttributeDataRanges = ReadClassArrayAtRawAddr<Il2CppCustomAttributeDataRange>(metadataHeader.attributeDataRangeOffset, metadataHeader.attributeDataRangeCount / 8).ToList();
-                LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+                LibLogger.VerboseNewline($"OK ([android moment]ms)");
             }
 
             LibLogger.Verbose("\tBuilding Lookup Table for field defaults...");
-            start = DateTime.Now;
+            //start = DateTime.Now;
             foreach (var il2CppFieldDefaultValue in fieldDefaultValues)
             {
                 _fieldDefaultValueLookup[il2CppFieldDefaultValue.fieldIndex] = il2CppFieldDefaultValue;
                 _fieldDefaultLookupNew[fieldDefs[il2CppFieldDefaultValue.fieldIndex]] = il2CppFieldDefaultValue;
             }
 
-            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
+            LibLogger.VerboseNewline($"OK ([android moment]ms)");
         }
 #pragma warning restore 8618
 
