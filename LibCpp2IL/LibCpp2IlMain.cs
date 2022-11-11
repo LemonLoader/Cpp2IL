@@ -142,21 +142,20 @@ namespace LibCpp2IL
         public static bool Initialize(byte[] binaryBytes, byte[] metadataBytes, int[] unityVersion)
         {
             LibCpp2IlReflection.ResetCaches();
-            LibLogger.InfoNewline("DEBUG LOG!");
-
-            //var start = DateTime.Now;
-
+            
+            var start = DateTime.Now;
+            
             LibLogger.InfoNewline("Initializing Metadata...");
             
             TheMetadata = Il2CppMetadata.ReadFrom(metadataBytes, unityVersion);
             
-            LibLogger.InfoNewline($"Initialized Metadata in [android moment]ms");
+            LibLogger.InfoNewline($"Initialized Metadata in {(DateTime.Now - start).TotalMilliseconds:F0}ms");
 
             if (TheMetadata == null)
                 return false;
 
             LibLogger.InfoNewline("Searching Binary for Required Data...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             ulong codereg, metareg;
             if (BitConverter.ToInt16(binaryBytes, 0) == 0x5A4D)
@@ -196,25 +195,25 @@ namespace LibCpp2IL
             if (codereg == 0 || metareg == 0)
                 throw new Exception("Failed to find Binary code or metadata registration");
                 
-            LibLogger.InfoNewline($"Got Binary codereg: 0x{codereg:X}, metareg: 0x{metareg:X} in [android moment]ms.");
+            LibLogger.InfoNewline($"Got Binary codereg: 0x{codereg:X}, metareg: 0x{metareg:X} in {(DateTime.Now - start).TotalMilliseconds:F0}ms.");
             LibLogger.InfoNewline("Initializing Binary...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
                 
             Binary.Init(codereg, metareg);
             
-            LibLogger.InfoNewline($"Initialized Binary in [android moment]ms");
+            LibLogger.InfoNewline($"Initialized Binary in {(DateTime.Now - start).TotalMilliseconds:F0}ms");
 
             if (!Settings.DisableGlobalResolving && MetadataVersion < 27)
             {
-                //start = DateTime.Now;
+                start = DateTime.Now;
                 LibLogger.Info("Mapping Globals...");
                 LibCpp2IlGlobalMapper.MapGlobalIdentifiers(TheMetadata, Binary);
-                LibLogger.InfoNewline($"OK [android moment]ms)");
+                LibLogger.InfoNewline($"OK ({(DateTime.Now - start).TotalMilliseconds:F0}ms)");
             }
 
             if (!Settings.DisableMethodPointerMapping)
             {
-                //start = DateTime.Now;
+                start = DateTime.Now;
                 LibLogger.Info("Mapping pointers to Il2CppMethodDefinitions...");
                 var i = 0;
                 foreach (var (method, ptr) in TheMetadata.methodDefs.Select(method => (method, ptr: method.MethodPointer)))
@@ -226,7 +225,7 @@ namespace LibCpp2IL
                     i++;
                 }
 
-                LibLogger.InfoNewline($"Processed {i} OK ([android moment]ms)");
+                LibLogger.InfoNewline($"Processed {i} OK ({(DateTime.Now - start).TotalMilliseconds:F0}ms)");
             }
 
             return true;

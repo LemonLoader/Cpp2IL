@@ -239,7 +239,7 @@ namespace Cpp2IL.Core
             CheckLibInitialized();
 
             Logger.InfoNewline("Building assemblies...This may take some time.");
-            //var start = DateTime.Now;
+            var start = DateTime.Now;
 
             var resolver = new RegistryAssemblyResolver();
             var moduleParams = new ModuleParameters
@@ -250,41 +250,41 @@ namespace Cpp2IL.Core
             };
 
             //Make stub types
-            //var startTwo = DateTime.Now;
+            var startTwo = DateTime.Now;
             Logger.Verbose("\tPre-generating stubs...");
             var Assemblies = StubAssemblyBuilder.BuildStubAssemblies(LibCpp2IlMain.TheMetadata!, moduleParams);
             Assemblies.ForEach(resolver.Register);
-            Logger.VerboseNewline($"OK ([android moment]ms)");
+            Logger.VerboseNewline($"OK ({(DateTime.Now - startTwo).TotalMilliseconds}ms)");
 
             //Configure utils class
             TypeDefinitions.BuildPrimitiveMappings();
 
             //Set base types and interfaces
-            //startTwo = DateTime.Now;
+            startTwo = DateTime.Now;
             Logger.Verbose("\tConfiguring Hierarchy...");
             AssemblyPopulator.ConfigureHierarchy();
-            Logger.VerboseNewline($"OK ([android moment]ms)");
+            Logger.VerboseNewline($"OK ({(DateTime.Now - startTwo).TotalMilliseconds}ms)");
 
             foreach (var imageDef in LibCpp2IlMain.TheMetadata!.imageDefinitions)
             {
-                //var startAssem = DateTime.Now;
+                var startAssem = DateTime.Now;
 
                 Logger.Verbose($"\tPopulating {imageDef.Name}...");
 
                 AssemblyPopulator.PopulateStubTypesInAssembly(imageDef, suppressAttributes);
 
-                Logger.VerboseNewline($"Done ([android moment]ms)");
+                Logger.VerboseNewline($"Done ({(DateTime.Now - startAssem).TotalMilliseconds}ms)");
             }
 
-            Logger.InfoNewline($"Finished Building Assemblies in [android moment]ms");
+            Logger.InfoNewline($"Finished Building Assemblies in {(DateTime.Now - start).TotalMilliseconds:F0}ms");
             Logger.InfoNewline("Fixing up explicit overrides. Any warnings you see here aren't errors - they usually indicate improperly stripped or obfuscated types, but this is not a big deal. This should only take a second...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             //Fixup explicit overrides.
             foreach (var imageDef in LibCpp2IlMain.TheMetadata.imageDefinitions)
                 AssemblyPopulator.FixupExplicitOverridesInAssembly(imageDef);
 
-            Logger.InfoNewline($"Fixup complete ([android moment]ms)");
+            Logger.InfoNewline($"Fixup complete ({(DateTime.Now - start).TotalMilliseconds:F0}ms)");
 
             SharedState.AssemblyList.AddRange(Assemblies);
 
@@ -483,7 +483,7 @@ namespace Cpp2IL.Core
 
             var numProcessed = 0;
 
-            //var startTime = DateTime.Now;
+            var startTime = DateTime.Now;
 
             thresholds.RemoveAt(0);
 
@@ -498,10 +498,10 @@ namespace Cpp2IL.Core
                         //Check again to prevent races
                         if (pct > nextThreshold)
                         {
-                            //var elapsedSoFar = DateTime.Now - startTime;
-                            //var rate = counter / elapsedSoFar.TotalSeconds;
+                            var elapsedSoFar = DateTime.Now - startTime;
+                            var rate = counter / elapsedSoFar.TotalSeconds;
                             var remaining = toProcess.Count - counter;
-                            Logger.InfoNewline($"{nextThreshold}% ({counter} classes in [android moment] sec, ~[android moment] classes / sec, {remaining} classes remaining, approx [android moment] sec remaining)", "Analyze");
+                            Logger.InfoNewline($"{nextThreshold}% ({counter} classes in {Math.Round(elapsedSoFar.TotalSeconds)} sec, ~{Math.Round(rate)} classes / sec, {remaining} classes remaining, approx {Math.Round(remaining / rate + 5)} sec remaining)", "Analyze");
                             nextThreshold = thresholds.First();
                             thresholds.RemoveAt(0);
                         }
@@ -644,8 +644,8 @@ namespace Cpp2IL.Core
             else
                 toProcess.ForEach(ProcessType);
 
-            //var elapsed = DateTime.Now - startTime;
-            Logger.InfoNewline($"Finished processing {numProcessed} methods in [android moment] ticks (about [android moment] seconds), at an overall rate of about [android moment] types/sec, [android moment] methods/sec", "Analyze");
+            var elapsed = DateTime.Now - startTime;
+            Logger.InfoNewline($"Finished processing {numProcessed} methods in {elapsed.Ticks} ticks (about {Math.Round(elapsed.TotalSeconds, 1)} seconds), at an overall rate of about {Math.Round(toProcess.Count / elapsed.TotalSeconds)} types/sec, {Math.Round(numProcessed / elapsed.TotalSeconds)} methods/sec", "Analyze");
 
             if (analysisLevel != AnalysisLevel.PSUEDOCODE_ONLY)
             {

@@ -33,7 +33,7 @@ namespace LibCpp2IL.PE
         {
             raw = input.GetBuffer();
             LibLogger.Verbose("\tReading PE File Header...");
-            //var start = DateTime.Now;
+            var start = DateTime.Now;
 
             if (ReadUInt16() != 0x5A4D) //Magic number
                 throw new FormatException("ERROR: Magic number mismatch.");
@@ -81,7 +81,7 @@ namespace LibCpp2IL.PE
                 };
             }
 
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             LibLogger.VerboseNewline($"\t\tImage Base at 0x{peImageBase:X}");
             LibLogger.VerboseNewline($"\t\tDLL is {(is32Bit ? "32" : "64")}-bit");
         }

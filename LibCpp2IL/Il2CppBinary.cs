@@ -53,35 +53,35 @@ namespace LibCpp2IL
             metadataRegistration = ReadClassAtVirtualAddress<Il2CppMetadataRegistration>(pMetadataRegistration);
 
             LibLogger.Verbose("\tReading generic instances...");
-            //var start = DateTime.Now;
+            var start = DateTime.Now;
             genericInsts = Array.ConvertAll(ReadClassArrayAtVirtualAddress<ulong>(metadataRegistration.genericInsts, metadataRegistration.genericInstsCount), ReadClassAtVirtualAddress<Il2CppGenericInst>);
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             LibLogger.Verbose("\tReading generic method pointers...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             genericMethodPointers = ReadClassArrayAtVirtualAddress<ulong>(codeRegistration.genericMethodPointers, (long) codeRegistration.genericMethodPointersCount);
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             LibLogger.Verbose("\tReading invoker pointers...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             invokerPointers = ReadClassArrayAtVirtualAddress<ulong>(codeRegistration.invokerPointers, (long) codeRegistration.invokerPointersCount);
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             if (LibCpp2IlMain.MetadataVersion < 27)
             {
                 LibLogger.Verbose("\tReading custom attribute generators...");
-                //start = DateTime.Now;
+                start = DateTime.Now;
                 customAttributeGenerators = ReadClassArrayAtVirtualAddress<ulong>(codeRegistration.customAttributeGeneratorListAddress, (long) codeRegistration.customAttributeCount);
-                LibLogger.VerboseNewline($"OK ([android moment]ms)");
+                LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             }
 
             LibLogger.Verbose("\tReading field offsets...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             fieldOffsets = ReadClassArrayAtVirtualAddress<long>(metadataRegistration.fieldOffsetListAddress, metadataRegistration.fieldOffsetsCount);
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             LibLogger.Verbose("\tReading types...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             var typesAddress = ReadClassArrayAtVirtualAddress<ulong>(metadataRegistration.typeAddressListAddress, metadataRegistration.numTypes);
             types = new Il2CppType[metadataRegistration.numTypes];
             for (var i = 0; i < metadataRegistration.numTypes; ++i)
@@ -91,26 +91,26 @@ namespace LibCpp2IL
                 typesDict[typesAddress[i]] = types[i];
             }
 
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             
             LibLogger.Verbose("\tReading type definition sizes...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             TypeDefinitionSizePointers = ReadClassArrayAtVirtualAddress<ulong>(metadataRegistration.typeDefinitionsSizes, metadataRegistration.typeDefinitionsSizesCount);
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             if (metadataRegistration.metadataUsages != 0)
             {
                 //Empty in v27
                 LibLogger.Verbose("\tReading metadata usages...");
-                //start = DateTime.Now;
+                start = DateTime.Now;
                 metadataUsages = ReadClassArrayAtVirtualAddress<ulong>(metadataRegistration.metadataUsages, (long)Math.Max((decimal) metadataRegistration.metadataUsagesCount, maxMetadataUsages));
-                LibLogger.VerboseNewline($"OK ([android moment]ms)");
+                LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             }
 
             if (LibCpp2IlMain.MetadataVersion >= 24.2f)
             {
                 LibLogger.VerboseNewline("\tReading code gen modules...");
-                //start = DateTime.Now;
+                start = DateTime.Now;
 
                 var codeGenModulePtrs = ReadClassArrayAtVirtualAddress<ulong>(codeRegistration.addrCodeGenModulePtrs, (long) codeRegistration.codeGenModulesCount);
                 codeGenModules = new Il2CppCodeGenModule[codeGenModulePtrs.Length];
@@ -169,29 +169,29 @@ namespace LibCpp2IL
                     }
                 }
 
-                LibLogger.VerboseNewline($"\tOK ([android moment]ms)");
+                LibLogger.VerboseNewline($"\tOK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             }
             else
             {
                 LibLogger.Verbose("\tReading method pointers...");
-                //start = DateTime.Now;
+                start = DateTime.Now;
                 methodPointers = ReadClassArrayAtVirtualAddress<ulong>(codeRegistration.methodPointers, (long) codeRegistration.methodPointersCount);
-                LibLogger.VerboseNewline($"Read {methodPointers.Length} OK ([android moment]ms)");
+                LibLogger.VerboseNewline($"Read {methodPointers.Length} OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             }
 
 
             LibLogger.Verbose("\tReading generic method tables...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             genericMethodTables = ReadClassArrayAtVirtualAddress<Il2CppGenericMethodFunctionsDefinitions>(metadataRegistration.genericMethodTable, metadataRegistration.genericMethodTableCount);
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             LibLogger.Verbose("\tReading method specifications...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             methodSpecs = ReadClassArrayAtVirtualAddress<Il2CppMethodSpec>(metadataRegistration.methodSpecs, metadataRegistration.methodSpecsCount);
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             LibLogger.Verbose("\tReading generic methods...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
             genericMethodDictionary = new Dictionary<int, ulong>();
             foreach (var table in genericMethodTables)
             {
@@ -206,7 +206,7 @@ namespace LibCpp2IL
                 }
             }
 
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
         }
 
         private int GetGenericMethodFromIndex(int genericMethodIndex, int genericMethodPointerIndex, out Il2CppGenericMethodRef? genericMethodRef)

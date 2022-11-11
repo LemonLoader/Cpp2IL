@@ -28,35 +28,35 @@ namespace LibCpp2IL.Elf
             _raw = input.GetBuffer();
 
             LibLogger.Verbose("\tReading Elf File Ident...");
-            //var start = DateTime.Now;
+            var start = DateTime.Now;
 
             ReadAndValidateIdent();
 
             var isBigEndian = _elfFileIdent!.Endianness == 2;
 
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             LibLogger.VerboseNewline($"\tBinary is {(is32Bit ? "32-bit" : "64-bit")} and {(isBigEndian ? "big-endian" : "little-endian")}.");
 
             if (isBigEndian)
                 SetBigEndian();
 
             LibLogger.Verbose("\tReading and validating full ELF header...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             ReadHeader();
 
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             LibLogger.VerboseNewline($"\tElf File contains instructions of type {InstructionSet}");
 
             LibLogger.Verbose("\tReading ELF program header table...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             ReadProgramHeaderTable();
 
-            LibLogger.VerboseNewline($"Read {_elfProgramHeaderEntries!.Count} OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"Read {_elfProgramHeaderEntries!.Count} OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             LibLogger.VerboseNewline("\tReading ELF section header table and names...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             //Non-null assertion reason: The elf header has already been checked while reading the program header.
             _elfSectionHeaderEntries = ReadClassArrayAtRawAddr<ElfSectionHeaderEntry>(_elfHeader!.pSectionHeader, _elfHeader.SectionHeaderEntryCount).ToList();
@@ -72,7 +72,7 @@ namespace LibCpp2IL.Elf
                 }
             }
 
-            LibLogger.VerboseNewline($"\tRead {_elfSectionHeaderEntries.Count} OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"\tRead {_elfSectionHeaderEntries.Count} OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             if (_elfSectionHeaderEntries.FirstOrDefault(s => s.Name == ".text") is { } textSection)
             {
@@ -91,25 +91,25 @@ namespace LibCpp2IL.Elf
                 _dynamicSection = ReadClassArrayAtRawAddr<ElfDynamicEntry>(dynamicSegment.RawAddress, dynamicSegment.RawSize / (is32Bit ? 8ul : 16ul)).ToList();
 
             LibLogger.VerboseNewline("\tFinding Relocations...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             ProcessRelocations();
 
-            LibLogger.VerboseNewline($"OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
 
             LibLogger.VerboseNewline("\tProcessing Symbols...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             ProcessSymbols();
 
-            LibLogger.VerboseNewline($"\tOK ([android moment]ms)");
+            LibLogger.VerboseNewline($"\tOK ({(DateTime.Now - start).TotalMilliseconds} ms)");
             
             LibLogger.Verbose("\tProcessing Initializers...");
-            //start = DateTime.Now;
+            start = DateTime.Now;
 
             ProcessInitializers();
 
-            LibLogger.VerboseNewline($"Got {_initializerPointers!.Count} OK ([android moment]ms)");
+            LibLogger.VerboseNewline($"Got {_initializerPointers!.Count} OK ({(DateTime.Now - start).TotalMilliseconds} ms)");
         }
 
         private void ReadAndValidateIdent()
